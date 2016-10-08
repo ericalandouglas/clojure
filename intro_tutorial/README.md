@@ -1,14 +1,6 @@
 # intro_tutorial
 
-A Clojure library designed to ... well, that part is up to you.
+Refer to doc directory for relevant notes.
 
-## Usage
+Project mainly built to provide a Clojure REPL while following along with an introductory tutorial.
 
-FIXME
-
-## License
-
-Copyright © 2016 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
