@@ -290,7 +290,7 @@ To begin a Clojure REPL use `lein repl` as the root of this repo.
   - leiningen will check popular open source repos for package dependencies such as clojars and maven central
   - you can use the terminal command `lein deps :tree`to view a list of all project dependencies
   - _snake case_ uses underscores `this_is_snake_case`, _kebab case_ uses hyphens `this-is-kebab-case`, _camel case_ uses capitals `ThisIsCamelCase`
-  - visit https://clojars.org/ to view and search through the packages offered on clojars
+  - visit **https://clojars.org/** to view and search through the packages offered on clojars, **http://search.maven.org/** to view and search maven repo
   - to run Clojure projects from the command line we need to define a `-main` function as the entry point
   - to run projects use the terminal command `lein run -m <desired-namespace>` (remember the namespace needs to define an entrypoint called `-main`)
   - `lein run` without specifiying a namespace is possible when the `:main` meta data in `project.clj` is provided
