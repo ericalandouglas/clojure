@@ -4,7 +4,12 @@ services:
 
   web:
     build: .
+    env_file: .env
+    expose:
+      - 3000
+      - 7000
     ports:
-      - "3000:3000"
+      - 3000:3000
+      - 7000:7000
     volumes:
       - .:/usr/src/app
