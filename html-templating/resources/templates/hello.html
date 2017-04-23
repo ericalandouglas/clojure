@@ -1,0 +1,22 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+  {% include "templates/register.html" %}
+
+  {{block.super}}
+  <h2>Hello, {{user.name|upper}}</h2>
+
+  {% if items|empty? %}
+    <p>No items found!</p>
+
+  {% else %}
+    <ul>
+
+    {% for item in items %}
+      <li>{{item}}</li>
+    {% endfor %}
+
+    </ul>
+  {% endif %}
+
+{% endblock %}
