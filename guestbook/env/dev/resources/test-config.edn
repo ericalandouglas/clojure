@@ -1,0 +1,4 @@
+{:dev true
+ :log-level :fatal
+ :port 3000
+ :database-url "jdbc:postgresql://test-postgres/test-postgres?user=postgres&password=postgres"}

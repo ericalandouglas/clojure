@@ -3,10 +3,12 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[com.h2database/h2 "1.4.193"]
+  :dependencies [[clj-time "0.13.0"]
+                 [com.h2database/h2 "1.4.193"]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
+                 [eftest "0.3.1"]
                  [funcool/struct "1.0.0"]
                  [luminus-immutant "0.2.3"]
                  [luminus-migrations "0.3.0"]
@@ -20,6 +22,7 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.clojure/tools.namespace "0.2.11"]
+                 [org.postgresql/postgresql "9.4.1212"]
                  [org.webjars.bower/tether "1.4.0"]
                  [org.webjars/bootstrap "4.0.0-alpha.5"]
                  [org.webjars/font-awesome "4.7.0"]

@@ -28,8 +28,7 @@
     (-> (response/found "/")
         (assoc :flash (assoc params :errors errors)))
     (do
-      (db/save-message!
-        (assoc params :timestamp (java.util.Date.)))
+      (db/save-message! params)
       (response/found "/"))))
 
 (defroutes home-routes

@@ -1,5 +1,5 @@
 CREATE TABLE guestbook
-(id INTEGER PRIMARY KEY AUTO_INCREMENT,
- name VARCHAR(30),
- message VARCHAR(200),
- timestamp TIMESTAMP);
+(id SERIAL PRIMARY KEY,
+ name TEXT NOT NULL,
+ message TEXT NOT NULL,
+ timestamp TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp);

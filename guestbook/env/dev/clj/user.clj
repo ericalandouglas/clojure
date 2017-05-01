@@ -1,7 +1,8 @@
 (ns user
   (:refer-clojure)
   (:require [clojure.tools.namespace.repl :refer [refresh]]
-            [guestbook.config :refer [env]]
+            [eftest.runner :as eftest]
+            [guestbook.config :refer [env load-env]]
             [guestbook.db.core]
             [luminus-migrations.core :as migrations]
             [mount.core :as mount]
@@ -39,4 +40,16 @@
     (reset-db!))
   (refresh)
   (restart))
+
+(defn run-tests
+  ([] (run-tests "test"))
+  ([ns-or-dir]
+    (stop)
+    (mount/start-with-states {#'guestbook.config/env
+                               {:start #(load-env :resource-path "test-config.edn")
+                                :stop hash-map}})
+    (eftest/run-tests (eftest/find-tests ns-or-dir)
+                      {:multithread? false
+                       :report eftest.report.pretty/report})
+    (restart)))
 
