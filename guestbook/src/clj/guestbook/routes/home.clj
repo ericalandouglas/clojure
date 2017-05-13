@@ -6,10 +6,8 @@
             [ring.util.http-response :as response]
             [struct.core :as st]))
 
-(defn home-page [flash]
-  (layout/render "home.html"
-    (merge {:messages (db/get-messages)}
-           (select-keys flash [:name :message :errors]))))
+(defn home-page []
+  (layout/render "home.html"))
 
 (defn about-page []
   (layout/render "about.html"))
@@ -23,16 +21,20 @@
       (st/validate message-schema)
       first))
 
-(defn save-message! [params]
+(defn save-message! [{:keys [params]}]
   (if-let [errors (validate-message params)]
-    (-> (response/found "/")
-        (assoc :flash (assoc params :errors errors)))
-    (do
-      (db/save-message! params)
-      (response/found "/"))))
+    (response/bad-request {:errors errors})
+    (try
+      (db/save-message!
+        (assoc params :timestamp (java.util.Date.)))
+      (response/ok {:status :ok})
+      (catch Exception e
+        (response/internal-server-error
+          {:errors {:server-error ["Failed to save message!"]}})))))
 
 (defroutes home-routes
-  (GET "/" {:keys [flash]} (home-page flash))
-  (POST "/message" {:keys [params]} (save-message! params))
+  (GET "/" [] (home-page))
+  (GET "/messages" [] (response/ok (db/get-messages)))
+  (POST "/message" req (save-message! req))
   (GET "/about" [] (about-page)))
 

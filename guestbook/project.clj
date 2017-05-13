@@ -4,7 +4,9 @@
   :url "http://example.com/FIXME"
 
   :dependencies [[clj-time "0.13.0"]
+                 [cljs-ajax "0.6.0"]
                  [com.h2database/h2 "1.4.193"]
+                 [com.taoensso/timbre "4.10.0"]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
@@ -19,6 +21,7 @@
                  [metosin/ring-http-response "0.8.2"]
                  [mount "0.1.11"]
                  [org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.521" :scope "provided"]
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.clojure/tools.namespace "0.2.11"]
@@ -28,6 +31,7 @@
                  [org.webjars/font-awesome "4.7.0"]
                  [org.webjars/jquery "3.1.1"]
                  [org.webjars/webjars-locator-jboss-vfs "0.1.0"]
+                 [reagent "0.6.1"]
                  [ring-webjars "0.1.1"]
                  [ring/ring-core "1.6.0-RC2"]
                  [ring/ring-defaults "0.2.3"]
@@ -38,14 +42,29 @@
   :jvm-opts ["-server" "-Dconf=.lein-env"]
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
-  :resource-paths ["resources"]
+  :resource-paths ["resources" "target/cljsbuild"]
+  :cljsbuild
+  {:builds {:app {:source-paths ["src/cljs"]
+                  :compiler {:output-to "target/cljsbuild/public/js/app.js"
+                             :output-dir "target/cljsbuild/public/js/out"
+                             :main "guestbook.core"
+                             :asset-path "/js/out"
+                             :optimizations :none
+                             :source-map true
+                             :pretty-print true}}}}
+  :clean-targets
+  ^{:protect false}
+  [:target-path
+   [:cljsbuild :builds :app :compiler :output-dir]
+   [:cljsbuild :builds :app :compiler :output-to]]
   :target-path "target/%s/"
   :main ^:skip-aot guestbook.core
   :migratus {:store :database :db ~(get (System/getenv) "DATABASE_URL")}
 
   :plugins [[lein-cprop "1.0.1"]
             [migratus-lein "0.4.4"]
-            [lein-immutant "2.1.0"]]
+            [lein-immutant "2.1.0"]
+            [lein-cljsbuild "1.1.6"]]
 
   :profiles
   {:uberjar {:omit-source true

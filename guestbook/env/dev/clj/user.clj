@@ -3,10 +3,11 @@
   (:require [clojure.tools.namespace.repl :refer [refresh]]
             [eftest.runner :as eftest]
             [guestbook.config :refer [env load-env]]
+            guestbook.core
             [guestbook.db.core]
             [luminus-migrations.core :as migrations]
             [mount.core :as mount]
-            guestbook.core)
+            [taoensso.timbre :as log])
   (:use clojure.repl))
 
 (defn run-migrations-ops [& ops]
@@ -41,13 +42,20 @@
   (refresh)
   (restart))
 
+(defn start-test-env []
+  (stop)
+  (mount/start-with-states {#'guestbook.config/env
+                             {:start #(load-env :resource-path "test.edn")
+                              :stop hash-map}}))
+
+(defn silence-logs [f & args]
+  (log/with-merged-config {:ns-blacklist ["*"]})
+                          (apply f args))
+
 (defn run-tests
   ([] (run-tests "test"))
   ([ns-or-dir]
-    (stop)
-    (mount/start-with-states {#'guestbook.config/env
-                               {:start #(load-env :resource-path "test-config.edn")
-                                :stop hash-map}})
+    (start-test-env)
     (eftest/run-tests (eftest/find-tests ns-or-dir)
                       {:multithread? false
                        :report eftest.report.pretty/report})

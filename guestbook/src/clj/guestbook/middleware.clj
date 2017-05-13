@@ -1,6 +1,6 @@
 (ns guestbook.middleware
   (:require [guestbook.env :refer [defaults]]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [guestbook.layout :refer [*app-context* error-page]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.webjars :refer [wrap-webjars]]

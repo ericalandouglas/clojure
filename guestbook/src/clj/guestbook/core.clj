@@ -5,7 +5,7 @@
             [luminus-migrations.core :as migrations]
             [guestbook.config :refer [env]]
             [clojure.tools.cli :refer [parse-opts]]
-            [clojure.tools.logging :as log]
+            [taoensso.timbre :as log]
             [mount.core :as mount])
   (:gen-class))
 
