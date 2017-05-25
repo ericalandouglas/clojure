@@ -1,0 +1,49 @@
+version: '2'
+
+volumes:
+  postgres:
+    driver: local
+  postgres-test:
+    driver: local
+
+services:
+
+  web:
+    build: .
+    expose:
+      - 3000
+      - 7000
+    ports:
+      - 3000:3000
+      - 7000:7000
+    volumes:
+      - .:/usr/src/app
+
+  # The backing database.
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    networks:
+      default:
+    ports:
+      - 5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  # The backing test database.
+  postgres-test:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres-test
+    networks:
+      default:
+    ports:
+      - 5432
+    volumes:
+      - postgres-test:/var/lib/postgresql/data
+
