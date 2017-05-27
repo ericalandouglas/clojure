@@ -7,6 +7,14 @@ VALUES (
 )
 RETURNING *
 
+-- :name update-stock! :<! :1
+-- :doc updates an existing stocks name by id
+UPDATE stocks
+SET name = (:name)::text,
+    updated_at = current_timestamp
+WHERE id = (:id)::int
+RETURNING *
+
 -- :name get-stocks :? :*
 -- :doc selects all available stocks
 SELECT * FROM stocks
@@ -29,4 +37,4 @@ SELECT DISTINCT ON (stocks.name)
 FROM stocks
 INNER JOIN stock_prices
   ON stock_prices.stock_id = stocks.id
-ORDER BY stocks.name, stock_prices.created_at DESC
+ORDER BY stocks.name, stock_prices.timestamp DESC

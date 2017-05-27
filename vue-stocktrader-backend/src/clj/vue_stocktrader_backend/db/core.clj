@@ -8,7 +8,3 @@
 (defstate ^:dynamic *db*
           :start (conman/connect! {:jdbc-url (env :database-url)})
           :stop (conman/disconnect! *db*))
-
-(conman/bind-connection *db* "sql/stocks.sql")
-(conman/bind-connection *db* "sql/stock_prices.sql")
-

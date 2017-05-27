@@ -27,7 +27,7 @@
   (run-migrations-ops "rollback" "migrate"))
 
 (defn load-data! []
-  (mount/start #'vue-stocktrader-backend.db.core/*db*)
+  (migrate)
   (fixtures/load! *db* fixtures/data))
 
 (defn start [& {:keys [migrate?] :or {migrate? false}}]

@@ -11,6 +11,7 @@
                            {:id 2 :user_id 2 :text \"555-898-2222\"}]]])
   "
   (:require
+    [buddy.hashers :as hashers]
     [clj-time.core :as t]
     [clj-time.jdbc]
     [clojure.java.jdbc :refer [insert-multi! delete!]]))
@@ -43,13 +44,21 @@
   (unload* spec data))
 
 (def data [[:stocks
-            [{:id 1
+            [{:id 0
               :name "Stock Fixture"
               :created_at (t/date-time 2015 12 25)
               :updated_at (t/date-time 2015 12 25)}]]
            [:stock_prices
-            [{:id 1
-              :stock_id 1
+            [{:id 0
+              :stock_id 0
               :price 99
+              :timestamp (t/date-time 2015 12 25)}]]
+           [:users
+            [{:id 0
+              :username "fixture-user"
+              :password (hashers/encrypt "fixture-pw")
+              :email "user@fixture.com"
+              :first_name "Mr."
+              :last_name "Fixture"
               :created_at (t/date-time 2015 12 25)
               :updated_at (t/date-time 2015 12 25)}]]])

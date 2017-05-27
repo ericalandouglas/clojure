@@ -3,7 +3,8 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[cheshire "5.7.1"]
+  :dependencies [[buddy "1.3.0"]
+                 [cheshire "5.7.1"]
                  [clj-time "0.13.0"]
                  [compojure "1.6.0"]
                  [conman "0.6.4"]
@@ -69,7 +70,7 @@
                   :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]]
 
                   :source-paths ["env/dev/clj"]
-                  :resource-paths ["env/dev/resources"]
+                  :resource-paths ["env/dev/resources" "resources"]
                   :repl-options {:init-ns user}
                   :injections [(require 'pjstadig.humane-test-output)
                                (pjstadig.humane-test-output/activate!)]}
