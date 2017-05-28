@@ -3,7 +3,6 @@
             [vue-stocktrader-backend.auth-token :as auth-token]
             [vue-stocktrader-backend.test.helper :as test-helper]))
 
-
 (use-fixtures
   :once (join-fixtures [test-helper/start-migrated-db
                         test-helper/load-fixture-data]))
@@ -16,8 +15,12 @@
   (let [test-data {:username "fixture-user"
                    :password "fixture-pw"}
         tok (auth-token/create-user-token test-helper/*t-conn* test-data)
-        decrypt-u (auth-token/decrypt-user-token tok)]
+        decrypt-u (auth-token/decrypt-user-token tok)
+        valid-tok (auth-token/valid-user-token? test-helper/*t-conn* tok)
+        valid-tok2 (auth-token/valid-user-token? test-helper/*t-conn* "junk")]
 
     (is (-> tok nil? not))
 
-    (is (= (:user-id decrypt-u) 0))))
+    (is (= (:user-id decrypt-u) 0))
+
+    (is (and valid-tok (not valid-tok2)))))

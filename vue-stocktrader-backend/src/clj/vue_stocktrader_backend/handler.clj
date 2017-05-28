@@ -6,7 +6,7 @@
             [compojure.route :as route]
             [vue-stocktrader-backend.env :refer [defaults]]
             [mount.core :as mount]
-            [vue-stocktrader-backend.middleware :as middleware]))
+            [vue-stocktrader-backend.middleware.core :as middleware]))
 
 (mount/defstate init-app
                 :start ((or (:init defaults) identity))

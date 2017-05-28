@@ -29,10 +29,21 @@
   (context "/" []
     :tags ["users"]
 
-    (POST "/login" []
+    (POST "/authenticate" []
       :return  user-token-description
       :body    [user-params user-auth-description]
       :summary "Generates a new JWT access token for valid user credentials."
       (if-let [t (auth-token/create-user-token user-params)]
         (created "" {:token t})
-        (unauthorized {:message "Invalid credentials."})))))
+        (unauthorized {:message "Invalid credentials."}))))
+
+  (context "/users" []
+    :tags ["users"]
+
+    (GET "/:id" []
+      :return  user-description
+      :path-params [id :- s/Int]
+      :summary "Returns the user with the given id."
+      (if-let [res (users-db/find-user-by-id {:id id})]
+        (ok (resource-view res))
+        (not-found)))))

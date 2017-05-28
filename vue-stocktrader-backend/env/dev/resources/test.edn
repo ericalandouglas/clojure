@@ -1,4 +1,5 @@
 {:dev true
+ :dangerous-disable-auth true
  :port 3000
  :database-url "jdbc:postgresql://postgres-test/postgres-test?user=postgres&password=postgres"
  :token-expiration-mins 1}
