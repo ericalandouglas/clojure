@@ -1,4 +1,4 @@
-(ns vue-stocktrader-backend.middleware.core
+(ns vue-stocktrader-backend.middleware
   (:require [vue-stocktrader-backend.env :refer [defaults]]
             [clojure.tools.logging :as log]
             [vue-stocktrader-backend.layout :refer [*app-context* error-page]]
@@ -7,7 +7,7 @@
             [ring.middleware.cors :refer [wrap-cors]]
             [muuntaja.middleware :refer [wrap-format wrap-params]]
             [vue-stocktrader-backend.config :refer [env]]
-            [vue-stocktrader-backend.middleware.route-validation :refer [wrap-token-validation]]
+            [vue-stocktrader-backend.auth.middleware :refer [wrap-request-auth]]
             [immutant.web.middleware :refer [wrap-session]]
             [ring.middleware.defaults :refer [api-defaults wrap-defaults]])
   (:import [javax.servlet ServletContext]))
@@ -54,7 +54,7 @@
 
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
-      wrap-token-validation
+      (wrap-request-auth (:dangerous-disable-auth env))
       wrap-webjars
       (wrap-session {:cookie-attrs {:http-only true}})
       (wrap-defaults api-defaults)

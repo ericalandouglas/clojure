@@ -1,8 +1,7 @@
-(ns vue-stocktrader-backend.middleware.route-validation
+(ns vue-stocktrader-backend.auth.middleware
   (:require
     [ring.util.response :as response]
-    [vue-stocktrader-backend.auth-token :as auth-token]
-    [vue-stocktrader-backend.config :refer [env]]))
+    [vue-stocktrader-backend.auth.token :as token]))
 
 (def secure-routes
   [[:post #"/stocks"]
@@ -21,21 +20,21 @@
                          (#(when % (Integer/parseInt %))))]
     (or (nil? uri-user-id) (= uri-user-id user-id))))
 
-(defn req-authenticated? [{:keys [headers uri] :as req}]
+(defn req-authenticated? [{:keys [headers uri] :as req} auth-disabled]
   (let [token (get headers "authorization")
-        {:keys [id]} (auth-token/valid-user-token? token)]
-    (or (:dangerous-disable-auth env)
+        decrypted-tok (token/decrypt-user-token token)]
+    (or auth-disabled
         (-> req is-secure-route? not)
-        (and token id))))
+        (and token decrypted-tok))))
 
-(defn req-authorized? [{:keys [uri]} user-id]
-  (or (:dangerous-disable-auth env)
-      (user-permitted? uri user-id)))
+(defn req-authorized? [{:keys [uri]} token auth-disabled]
+  (or auth-disabled
+      (user-permitted? uri (:user-id token))))
 
-(defn wrap-token-validation [handler]
+(defn wrap-request-auth [handler auth-disabled]
   (fn [req]
-    (if-let [user-id (req-authenticated? req)]
-      (if (req-authorized? req user-id)
+    (if-let [t (req-authenticated? req auth-disabled)]
+      (if (req-authorized? req t auth-disabled)
         (handler req)
         (-> (response/response "Forbidden.")
             (response/status 403)))

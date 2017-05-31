@@ -2,7 +2,7 @@
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [vue-stocktrader-backend.auth-token :as auth-token]
+            [vue-stocktrader-backend.auth.token :as token]
             [vue-stocktrader-backend.db.users :as users-db]
             [vue-stocktrader-backend.schema.users :as users-schema]))
 
@@ -33,7 +33,7 @@
       :return  user-token-description
       :body    [user-params user-auth-description]
       :summary "Generates a new JWT access token for valid user credentials."
-      (if-let [t (auth-token/create-user-token user-params)]
+      (if-let [t (token/create-user-token user-params)]
         (created "" {:token t})
         (unauthorized {:message "Invalid credentials."}))))
 

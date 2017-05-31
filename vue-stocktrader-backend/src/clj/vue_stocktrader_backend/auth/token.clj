@@ -1,4 +1,4 @@
-(ns vue-stocktrader-backend.auth-token
+(ns vue-stocktrader-backend.auth.token
   (:require
     [buddy.sign.jwt :as jwt]
     [buddy.core.keys :as ks]
@@ -29,10 +29,3 @@
     (jwt/unsign token pub-key encrypt-opts)
     (catch Exception e
       nil)))
-
-(defn valid-user-token?
-  ([token]
-   (valid-user-token? *db* token))
-  ([db-conn token]
-     (when-let [{:keys [user-id]} (decrypt-user-token token)]
-       (users-db/find-user-by-id db-conn {:id user-id}))))

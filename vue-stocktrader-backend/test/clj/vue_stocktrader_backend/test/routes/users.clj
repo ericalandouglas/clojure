@@ -2,7 +2,7 @@
   (:require [cheshire.core :as json]
             [clojure.test :refer :all]
             [ring.mock.request :refer :all]
-            [vue-stocktrader-backend.auth-token :as auth-token]
+            [vue-stocktrader-backend.auth.token :as token]
             [vue-stocktrader-backend.db.users :as users-db]
             [vue-stocktrader-backend.handler :refer :all]
             [vue-stocktrader-backend.routes.users :refer [resource-view]]
@@ -12,7 +12,7 @@
 (deftest test-users
   (testing "POST /authenticate route"
     (testing "returns a token when valid creds received"
-      (with-redefs [auth-token/create-user-token (fn [_] "token")]
+      (with-redefs [token/create-user-token (fn [_] "token")]
         (let [response ((app) (-> (request :post "/authenticate")
                                   (content-type "application/json")
                                   (body (json/generate-string
@@ -21,7 +21,7 @@
           (is (= 201 (:status response)))
           (is (= "token" token)))))
     (testing "returns a 401 when invalid creds received"
-      (with-redefs [auth-token/create-user-token (fn [_] nil)]
+      (with-redefs [token/create-user-token (fn [_] nil)]
         (let [response ((app) (-> (request :post "/authenticate")
                                   (content-type "application/json")
                                   (body (json/generate-string
