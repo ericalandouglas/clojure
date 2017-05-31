@@ -52,12 +52,22 @@
       ;; since they're not compatible with this middleware
       ((if (:websocket? request) handler wrapped) request))))
 
+(defn wrap-route-logging [handler]
+  (fn [{:keys [request-method uri] :as req}]
+    (let [method (-> request-method name clojure.string/upper-case)]
+      (log/info (str "received " method " request at " uri))
+      (let [{:keys [status body] :as res} (handler req)]
+        (log/info (str "completed " method " request at " uri
+                       " with status " status))
+        res))))
+
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
       (wrap-request-auth (:dangerous-disable-auth env))
       wrap-webjars
       (wrap-session {:cookie-attrs {:http-only true}})
       (wrap-defaults api-defaults)
+      wrap-route-logging
       (wrap-cors :access-control-allow-origin [#"http://localhost:8080"]
                  :access-control-allow-methods [:get :put :post :delete])
       wrap-context

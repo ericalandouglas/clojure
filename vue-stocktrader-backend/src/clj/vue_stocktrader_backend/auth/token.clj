@@ -5,6 +5,7 @@
     [clj-time.core :as t]
     [clj-time.coerce :as tc]
     [clojure.java.io :as io]
+    [clojure.tools.logging :as log]
     [vue-stocktrader-backend.config :refer [env]]
     [vue-stocktrader-backend.db.core :refer [*db*]]
     [vue-stocktrader-backend.db.users :as users-db]))
@@ -21,8 +22,11 @@
                                                        user)]
      (let [exp (-> (:token-expiration-mins env)
                    t/minutes
-                   t/from-now)]
-       (jwt/sign {:user-id id :exp exp} priv-key encrypt-opts)))))
+                   t/from-now)
+           token {:user-id id :exp exp}]
+       (log/info (str "created user token with "
+                      "id: " id ", exp: " exp))
+       (jwt/sign token priv-key encrypt-opts)))))
 
 (defn decrypt-user-token [token]
   (try

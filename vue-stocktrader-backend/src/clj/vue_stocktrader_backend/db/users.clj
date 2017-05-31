@@ -2,6 +2,7 @@
   (:require
     [buddy.hashers :as hashers]
     [clojure.java.jdbc :as jdbc]
+    [clojure.tools.logging :as log]
     [conman.core :as conman]
     [vue-stocktrader-backend.db.core :refer [*db*]]))
 
@@ -10,9 +11,14 @@
 (defn create-user!
   ([user]
    (create-user! *db* user))
-
   ([db-conn user]
-   (save-user! db-conn (update user :password hashers/derive))))
+   (let [u-data (update user :password hashers/derive)
+         u (save-user! db-conn u-data)]
+     (log/info (str "new user created with "
+                    "id: " (:id u) ", "
+                    "username: " (:username u) ", "
+                    "email: " (:email u)))
+     u)))
 
 (defn authenticate-user
   ([user]
