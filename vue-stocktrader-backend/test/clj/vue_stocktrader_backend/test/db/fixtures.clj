@@ -61,4 +61,10 @@
               :first_name "Mr."
               :last_name "Fixture"
               :created_at (t/date-time 2015 12 25)
+              :updated_at (t/date-time 2015 12 25)}]]
+           [:stock_portfolios
+            [{:id 0
+              :user_id 0
+              :funds 9999
+              :created_at (t/date-time 2015 12 25)
               :updated_at (t/date-time 2015 12 25)}]]])

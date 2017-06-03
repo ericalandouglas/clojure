@@ -1,7 +1,8 @@
 (ns vue-stocktrader-backend.routes.core
   (:require [compojure.api.sweet :refer :all]
-            [vue-stocktrader-backend.routes.stocks :refer [stocks-routes]]
             [vue-stocktrader-backend.routes.services :refer [sample-routes]]
+            [vue-stocktrader-backend.routes.stocks :refer [stocks-routes]]
+            [vue-stocktrader-backend.routes.stock-portfolios :refer [stock-portfolios-routes]]
             [vue-stocktrader-backend.routes.users :refer [users-routes]]))
 
 (defapi service-routes
@@ -11,6 +12,7 @@
                            :title "Stocktrader API"
                            :description "Backend for a vuejs stocktrader UI"}}}}
 
-  stocks-routes
   sample-routes
+  stocks-routes
+  stock-portfolios-routes
   users-routes)

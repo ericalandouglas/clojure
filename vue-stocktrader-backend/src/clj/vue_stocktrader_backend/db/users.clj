@@ -20,10 +20,13 @@
                     "email: " (:email u)))
      u)))
 
+(defn resource-view [u]
+  (dissoc u :password))
+
 (defn authenticate-user
   ([user]
    (authenticate-user *db* user))
   ([db-conn {:keys [password] :as user}]
    (let [u (find-user-by-username db-conn user)]
      (when (hashers/check password (:password u))
-       (dissoc u :password)))))
+       (resource-view u)))))

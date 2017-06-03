@@ -5,7 +5,6 @@
             [vue-stocktrader-backend.auth.token :as token]
             [vue-stocktrader-backend.db.users :as users-db]
             [vue-stocktrader-backend.handler :refer :all]
-            [vue-stocktrader-backend.routes.users :refer [resource-view]]
             [vue-stocktrader-backend.schema.users :refer [example-user]]
             [vue-stocktrader-backend.test.helper :as test-helper]))
 
@@ -36,4 +35,4 @@
         (let [response ((app) (request :get "/users/1"))
               body (-> response :body test-helper/parse-body)]
           (is (= 200 (:status response)))
-          (is (= (resource-view example-user) body)))))))
+          (is (= (users-db/resource-view example-user) body)))))))

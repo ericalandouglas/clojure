@@ -6,13 +6,10 @@
             [vue-stocktrader-backend.db.users :as users-db]
             [vue-stocktrader-backend.schema.users :as users-schema]))
 
-(defn resource-view [u]
-  (dissoc u :password))
-
 (def user-description
   (describe users-schema/User
             "User is an entity representing a user account."
-            :example (resource-view users-schema/example-user)))
+            :example (users-db/resource-view users-schema/example-user)))
 
 (def user-auth-description
   (describe users-schema/UserAuthenticate
@@ -45,5 +42,5 @@
       :path-params [id :- s/Int]
       :summary "Returns the user with the given id."
       (if-let [res (users-db/find-user-by-id {:id id})]
-        (ok (resource-view res))
+        (ok (users-db/resource-view res))
         (not-found)))))

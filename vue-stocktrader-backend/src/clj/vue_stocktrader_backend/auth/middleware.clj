@@ -5,7 +5,8 @@
 
 (def secure-routes
   [[:post #"/stocks"]
-   [:get #"/users/[0-9]+"]])
+   [:get #"/users/[0-9]+"]
+   [:post #"/users/[0-9]+/stock-portfolio"]])
 
 (defn is-secure-route? [{:keys [request-method uri]}]
   (let [is-match? (fn [[method path-regex]]
